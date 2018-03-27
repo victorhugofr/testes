@@ -14,5 +14,6 @@ public:
 		void setpulos(int p);
 		char *getname();
 		void setname(char*name);
+		int pular();
 };
 #endif

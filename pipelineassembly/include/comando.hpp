@@ -5,5 +5,6 @@ using namespace std;
 class Comando{
 public:
 	string comando;
+	string saida;
 };
 #endif

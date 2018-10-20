@@ -13,28 +13,6 @@ void clear (Node *&n){
     }
 }
 
-int insert(Node *&root1,Node *&novo){
-    if(!root1){
-        root1 = novo;
-         return 0;
-    }
-    if(root1->i > novo->i){
-        if(!root1->left){
-            root1->left = novo;
-             return 0;
-        }
-            return insert(root1->left, novo);
-    }
-    if(root1->i <= novo->i){
-        if(!root1->right){
-            root1->right = novo;
-             return 0;
-        }
-          return  insert(root1->right,novo);
-    }
-     return -1;
-}
-
 void print(Node *node) const{
     if(node){
         print(node->left);
@@ -52,24 +30,34 @@ void print(Node *node) const{
         print(node->right);
     }
 }
-
+int insert(Node*root2,Node *root1,Node *novo){
+    Node *aux = root2;
+    if(aux==root1){
+        if(!aux->left){
+            aux->left = novo;
+            return 0;
+        }else if(!aux->right){
+            aux->right=novo;
+            return 0;
+        }else{
+            return -1;
+        }
+    }else if(aux->left){
+        return insert(aux->left,root1,novo);
+    }else if(aux->right){
+        return insert(aux->right,root1,novo);
+    }
+    return -1;
+}
 bool find (Node *n, int i) const{
     if(n->i == i){
         return 1;
     }
-
-    if(n->i <= i){
-        if(n->right){
-            return find(n->right,i);
-        }
-            return 0;
-    }else{
-        if(n->left){
+    if(n->left){
             return find(n->left,i);
-        }
-        if(!n->right){
-            return 0;
-        }
+    }
+    if(n->right){
+        return find(n->right,i);
     }
 }
 
@@ -98,13 +86,16 @@ void destroy(Node *&n){
 
 void copy(Node *n){
     if(n){
-        insert(root,n);
+        insert(root,root,n);
     }
 }
 
 public:
 Tree(){
     root = NULL;
+}
+Tree(Node* n1){
+    root = n1;
 }
 
 Tree(const Tree &rhs){
@@ -118,7 +109,7 @@ Tree(const Tree &rhs){
         delete root;
     }
 }
-Tree& operator = (const Tree &rhs){   
+/**Tree& operator = (const Tree &rhs){   
     if(root){
         clear(root);
         root = NULL;
@@ -152,7 +143,7 @@ Tree& operator = (const Tree &rhs){
         }
     }
     return *this;
-}
+}*/
 bool operator == (const Tree &rhs){
      int red[2];
      red[0] = count(root);
@@ -210,13 +201,9 @@ void clear(){
     }
 }
 
-int insert(int i){
-    Node *temp;
-    temp = new Node;
-    temp->i = i;
-    temp->left = NULL;
-    temp->right = NULL;
-    return insert(root,temp);
+int insert(Node *root1,Node *novo){
+    insert(root,root1,novo);
+    
 }
 
 bool find(int i) const{
